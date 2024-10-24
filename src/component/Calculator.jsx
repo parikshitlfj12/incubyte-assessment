@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { add } from "@/utils/helper";
 import { motion } from "framer-motion";
-import { FiDelete, FiPlusCircle } from "react-icons/fi";
+import { FiDelete, FiPlusCircle, FiInfo } from "react-icons/fi";
+import FeaturesModal from "./FeaturesModal";
 
 export default function Calculator() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCalculate = () => {
     try {
@@ -26,24 +28,38 @@ export default function Calculator() {
     setError(null);
   };
 
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
   return (
+    <div className="parent-container">
+
     <motion.div
       className="container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, scale: 1.1 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.h1
-        className="title"
-        initial={{ x: -200 }}
-        animate={{ x: 0 }}
-        transition={{ type: "spring", stiffness: 120 }}
-      >
-        <span role="img" aria-label="calculator">
-          🧮
-        </span>{" "}
-        String Calculator
-      </motion.h1>
+      <motion.div className="title-wrapper">
+        <motion.h1
+          className="title"
+          initial={{ x: -200 }}
+          animate={{ x: 0 }}
+          transition={{ type: "spring", stiffness: 120 }}
+        >
+          <span role="img" aria-label="calculator">
+            🧮
+          </span>{" "}
+          String Calculator
+        </motion.h1>
+        <motion.button
+          className="info-button"
+          onClick={toggleModal}
+          whileHover={{ scale: 1.2 }}
+          aria-label="info"
+        >
+          <FiInfo size={12} />
+        </motion.button>
+      </motion.div>
 
       <motion.textarea
         placeholder="Enter numbers (Use comma or new line)"
@@ -97,6 +113,9 @@ export default function Calculator() {
           {result !== null ? `Result: ${result}` : ""}
         </motion.p>
       )}
+
+      <FeaturesModal isModalOpen={isModalOpen} toggleModal={toggleModal} />
     </motion.div>
+    </div>
   );
 }
